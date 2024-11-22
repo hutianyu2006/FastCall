@@ -1,0 +1,7 @@
+# Server file ignored to protect privacy
+# However, if you really want to build your own one, below are explainations of the endpoints: 
+# /sse :  The Server-Sent Event endpoint that broadcasts the signals (Attention that proper ways should be taken to avoid sending signals to the client who sent the signal)
+# /signal : The HTTP POST endpoint that  accepts SDP and ICE signals from clients.
+# /getCredentials : acquires TURN credentials from Cloudflare Calls, and respond with the response from cloudflare as-is.
+# Also remember to handle Fetch API preflight checks (handle the method OPTIONS)
+/signalServer.mjs

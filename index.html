@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+    <meta charset="UTF-8">
+    <title>急电</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="index.js"></script>
+</head>
+<body>
+    <div class='flex space-x-2 justify-center items-center bg-gray-100 h-screen dark:invert' id="loadingPage">
+        <span class='sr-only'>Loading...</span>
+        <div class='h-8 w-8 bg-blue-500 rounded-full animate-bounce [animation-delay:-0.3s]'></div>
+        <div class='h-8 w-8 bg-blue-500 rounded-full animate-bounce [animation-delay:-0.15s]'></div>
+        <div class='h-8 w-8 bg-blue-500 rounded-full animate-bounce'></div>
+    </div>
+    <div id="connectionPage" class="min-h-screen flex flex-col justify-center items-center bg-gray-100 p-4 space-y-6 hidden dark:bg-black">
+        <label for="connectionSecret" class="text-gray-600 mb-2 dark:text-gray-300">在下方输入配对密钥</label>
+        <input id="connectionSecret"
+               placeholder="在此输入配对密钥"
+               class="w-80 px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 placeholder-gray-400 text-gray-700 dark:placeholder-gray-300 dark:text-gray-100" />
+
+        <div>
+            <button id="startButton"
+                    class="px-6 py-2 bg-blue-500 text-white rounded-md shadow hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-offset-2">
+                开始配对
+            </button>
+            <button id="generateSecret"
+                    class="ml-4 px-6 py-2 bg-blue-500 text-white rounded-md shadow hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-offset-2"
+                    onclick="document.getElementById('connectionSecret').value = Math.random().toString(16).substring(2, 12); let changeEvt = new Event('change'); document.getElementById('connectionSecret').dispatchEvent(changeEvt);">
+                生成随机密钥
+            </button>
+        </div>
+        
+        <div id="connectionTips"
+             class="text-gray-600 text-md font-medium">
+            使用方法：在两台设备上打开此页面，输入相同的配对密钥（推荐在一端生成随机密钥，然后在另一端输入相同的密钥），然后在其中一端点击开始配对
+        </div>
+
+        <div id="connectionStatus"
+             class="text-gray-600 text-sm font-medium">
+        </div>
+    </div>
+    <div id="transferPage" class="min-h-screen flex flex-col justify-center items-center bg-gray-100 p-4 space-y-6 hidden dark:bg-black">
+        <div class="text-gray-600 mb-4 dark:text-gray-300">目前只支持单个文件传送</div>
+
+        <div id="dropZone"
+             class="border-2 border-dashed border-gray-300 rounded-lg p-4 w-72 flex flex-col justify-center items-center hover:border-blue-500 focus:border-blue-500 transition duration-200 ease-in-out dark:bg-black ">
+            <input type="file"
+                   id="file"
+                   class="hidden" />
+            <label for="file"
+                   class="cursor-pointer text-blue-500 hover:text-blue-700 block w-64 text-center truncate"
+                   id="fileLabel">
+                拖拽文件到这里，或点击选择文件
+            </label>
+        </div>
+
+        <button id="sendButton"
+                class="mt-4 bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 transition">
+            发送文件
+        </button>
+
+        <div id="statusWindow" class="absolute z-999 left-0 top-0 h-screen w-screen flex flex-col justify-center items-center mt-6 text-left transition duration-200 ease-in-out bg-gray-900/75 hidden">
+            <div class="rounded-lg bg-gray-100 shadow-sm w-3/5 ">
+                <div class="text-blue-700 text-lg text-center">传输中，请勿离开此页面</div>
+                <div class="flex justify-between p-4">
+                    <span class="block text-md font-medium text-blue-700 dark:text-white truncate w-20" id="filename"></span>
+                    <span class="text-md font-medium text-blue-700 dark:text-white">传输速率：<span id="speed"></span>&nbsp;进度：<span id="progress"></span></span>
+                </div>
+                <div class="w-full bg-gray-200 rounded-full h-4 dark:bg-gray-700">
+                    <div class="bg-blue-600 h-4 rounded-full" style="width: 0%" id="progressBar"></div>
+                </div>
+            </div>
+            </div>
+    </div>
+
+</body>
+</html>
