@@ -308,6 +308,7 @@ document.addEventListener('DOMContentLoaded', async function () {
      * Reloads the page to establish a new connection.
      */
     dataChannel.onclose = () => {
+        alert("数据通道断开，即将刷新");
         location.reload();
     };
 
