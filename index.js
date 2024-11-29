@@ -367,7 +367,7 @@ document.addEventListener('DOMContentLoaded', async function () {
                 fileSize = parseInt(new TextDecoder().decode(new Uint8Array(data)).replace("SIZE=", ""));
             } else if (data.toString() === Array.from(new TextEncoder().encode("NNNN")).toString()) {
                 // Data write ends
-                cacheWorker.postMessage({ instruction: "read" });
+                cacheWorker.postMessage({ instruction: "read", fileSize });
                 let cacheFile = await new Promise((resolve) => {
                     cacheWorker.onmessage = (e) => {
                         resolve(e.data);

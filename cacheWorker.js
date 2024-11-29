@@ -31,6 +31,7 @@ self.onmessage = async (e) => {
         }
         else if (e.data.instruction === "read") {
             // Read the data from the cache.
+            while (cacheHandle.getSize() < e.data.fileSize) { }
             let dataView = new DataView(new ArrayBuffer(size));
             cacheHandle.read(dataView, { at: 0 });
             let blob = new Blob([dataView]);
