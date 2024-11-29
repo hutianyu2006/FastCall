@@ -1,14 +1,52 @@
 document.addEventListener('DOMContentLoaded', async function () {
+
+    //Check the avability of APIs used
+    if (!window.RTCPeerConnection || !window.RTCDataChannel || !window.RTCIceCandidate || !window.RTCSessionDescription || !window.EventSource || !window.Worker) {
+        alert("您的浏览器不支持急电，请使用最新的浏览器。");
+        return;
+    }
+    
+
     /**
      * The endpoint URL for API requests.
      * @type {string}
      */
     let endpoint = "https://p2p.i-am-cjc.tech/api";
+
+
     /**
      * Fetches credentials from the API endpoint.
      * @returns {Promise<Object>} The credentials object.
      */
-    let credentials = await fetch(endpoint + "/getCredentials", {credentials : "include"}).then(res => res.json());
+    let credentials = await fetch(endpoint + "/getCredentials", { credentials: "include" }).then(res => res.json());
+
+    /**
+     * Initializes the Zstd codec and provides compression and decompression functions.
+     * @typedef {Object} ZstdCodec
+     * @property {Function} ZstdInit - Initializes the Zstd codec.
+     * @property {Object} ZstdSimple - Provides simple compression and decompression functions.
+     * @property {Function} ZstdSimple.compress - Compresses data using Zstd compression algorithm.
+     * @property {Function} ZstdSimple.decompress - Decompresses data using Zstd compression algorithm.
+     */
+
+    /**
+     * The Zstd codec object.
+     * @type {ZstdCodec}
+     */
+    const zstd = await zstdCodec.ZstdInit();
+
+    /**
+     * Compresses data using Zstd compression algorithm.
+     * @type {Function}
+     */
+    const compress = zstd.ZstdSimple.compress;
+
+    /**
+     * Decompresses data using Zstd compression algorithm.
+     * @type {Function}
+     */
+    const decompress = zstd.ZstdSimple.decompress;
+
     /**
      * Removes the loading page and shows the connection page.
      */
@@ -152,14 +190,15 @@ document.addEventListener('DOMContentLoaded', async function () {
                 lastSpeed = 0;
             }, 1000);
             await new Promise((resolve) => {
-                dataChannel.bufferedAmountLowThreshold = peerConnection.sctp.maxMessageSize;
+                dataChannel.bufferedAmountLowThreshold = 1;
                 dataChannel.onbufferedamountlow = () => {
                     if (offset >= data.byteLength) {
                         resolve()
                     }
                     else {
                         const chunk = data.slice(offset, offset + chunkSize);
-                        dataChannel.send(chunk);
+                        const compressedChunk = compress(new Uint8Array(chunk));
+                        dataChannel.send(compressedChunk.buffer);
                         offset += chunkSize;
                         lastSpeed += chunkSize;
                         changeProgress((offset / file.size * 100).toFixed(1) + "%");
@@ -346,7 +385,8 @@ document.addEventListener('DOMContentLoaded', async function () {
                 document.getElementById("statusWindow").classList.add("hidden");
 
             } else {
-                cacheWorker.postMessage(new Uint8Array(data).buffer);
+                const decompressedData = decompress(new Uint8Array(data));
+                cacheWorker.postMessage(decompressedData.buffer);
                 packetsGet += 1;
                 bytesGet = packetsGet * chunkSize;
                 lastSpeed += chunkSize;
