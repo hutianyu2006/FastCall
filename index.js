@@ -197,8 +197,9 @@ document.addEventListener('DOMContentLoaded', async function () {
                     }
                     else {
                         const chunk = data.slice(offset, offset + chunkSize);
-                        const compressedChunk = compress(new Uint8Array(chunk));
-                        dataChannel.send(compressedChunk.buffer);
+                        //const compressedChunk = compress(new Uint8Array(chunk));
+                        //dataChannel.send(compressedChunk.buffer);
+                        dataChannel.send(chunk);
                         offset += chunkSize;
                         lastSpeed += chunkSize;
                         changeProgress((offset / file.size * 100).toFixed(1) + "%");
@@ -386,8 +387,9 @@ document.addEventListener('DOMContentLoaded', async function () {
                 document.getElementById("statusWindow").classList.add("hidden");
 
             } else {
-                const decompressedData = decompress(new Uint8Array(data));
-                cacheWorker.postMessage(decompressedData.buffer);
+                //const decompressedData = decompress(new Uint8Array(data));
+                //cacheWorker.postMessage(decompressedData.buffer);
+                cacheWorker.postMessage(new Uint8Array(data).buffer);
                 packetsGet += 1;
                 bytesGet = packetsGet * chunkSize;
                 lastSpeed += chunkSize;
