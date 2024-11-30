@@ -386,9 +386,8 @@ document.addEventListener('DOMContentLoaded', async function () {
                 document.getElementById("statusWindow").classList.add("hidden");
 
             } else {
-                const decompressedData = decompress(new Uint8Array(data));
-                cacheWorker.postMessage(decompressedData.buffer);
-                //cacheWorker.postMessage(new Uint8Array(data).buffer);
+                //Things about decompressioon has moved to Web Worker
+                cacheWorker.postMessage(new Uint8Array(data).buffer);
                 packetsGet += 1;
                 bytesGet = packetsGet * chunkSize;
                 lastSpeed += chunkSize;
