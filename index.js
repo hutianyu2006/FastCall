@@ -238,7 +238,7 @@ document.addEventListener('DOMContentLoaded', async function () {
         document.getElementById("connectionStatus").innerText = "连接成功";
         document.getElementById("connectionPage").classList.add("hidden")
         document.getElementById("transferPage").classList.remove("hidden");
-        chunkSize = peerConnection.sctp.maxMessageSize;
+        chunkSize = peerConnection.sctp.maxMessageSize / 2;
         const stats = await peerConnection.getStats();
 
         // Find the selected candidate pair
