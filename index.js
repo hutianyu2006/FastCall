@@ -171,7 +171,7 @@ document.addEventListener('DOMContentLoaded', async function () {
                     }
                     else {
                         const chunk = data.slice(offset, offset + chunkSize);
-                        const compressedChunk = zstd.ZstdSimple.compress(chunk);
+                        const compressedChunk = zstd.ZstdSimple.compress(new Uint8Array(chunk));
                         dataChannel.send(compressedChunk.buffer);
                         //dataChannel.send(chunk);
                         offset += chunkSize;
@@ -180,7 +180,7 @@ document.addEventListener('DOMContentLoaded', async function () {
                     }
                 }
                 const chunk = data.slice(offset, offset + chunkSize);
-                const compressedChunk = zstd.ZstdSimple.compress(chunk);
+                const compressedChunk = zstd.ZstdSimple.compress(new Uint8Array(chunk));
                 dataChannel.send(compressedChunk.buffer);
                 offset += chunkSize;
                 lastSpeed += chunkSize;
