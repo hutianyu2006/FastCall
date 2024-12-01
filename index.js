@@ -283,9 +283,9 @@ document.addEventListener('DOMContentLoaded', async function () {
      * Event handler for when the data channel is closed.
      * Reloads the page to establish a new connection.
      */
-    dataChannel.onclose = () => {
+    /*dataChannel.onclose = () => {
         location.reload();
-    };
+    };*/
 
     /**
      * Event handler for when the connection secret input value changes.
@@ -438,16 +438,6 @@ document.addEventListener('DOMContentLoaded', async function () {
     document.getElementById("sendButton").onclick = async () => {
         await sendFile();
     }
-
-    /**
-     * Event listener for the "close" event.
-     * Closes the data channel and the event source.
-     * @returns {void}
-     */
-    document.addEventListener("close", () => {
-        dataChannel.close();
-        evtSrc.close();
-    })
 
     /**
      * Event listener for the "beforeunload" event.
