@@ -20,14 +20,6 @@ document.addEventListener('DOMContentLoaded', async function () {
      */
     let credentials = await fetch(endpoint + "/getCredentials", { credentials: "include" }).then(res => res.json());
 
-    /**
-     * Initializes the Zstd codec and provides compression and decompression functions.
-     * @typedef {Object} ZstdCodec
-     * @property {Function} ZstdInit - Initializes the Zstd codec.
-     * @property {Object} ZstdSimple - Provides simple compression and decompression functions.
-     * @property {Function} ZstdSimple.compress - Compresses data using Zstd compression algorithm.
-     * @property {Function} ZstdSimple.decompress - Decompresses data using Zstd compression algorithm.
-     */
 
     /**
      * Removes the loading page and shows the connection page.
@@ -179,7 +171,6 @@ document.addEventListener('DOMContentLoaded', async function () {
                     }
                     else {
                         const chunk = data.slice(offset, offset + chunkSize);
-                        const zstd = await zstdCodec.ZstdInit();
                         const compressedChunk = zstd.ZstdSimple.compress(chunk);
                         dataChannel.send(compressedChunk.buffer);
                         //dataChannel.send(chunk);
@@ -369,7 +360,6 @@ document.addEventListener('DOMContentLoaded', async function () {
                 document.getElementById("statusWindow").classList.add("hidden");
 
             } else {
-                const zstd = await zstdCodec.ZstdInit();
                 const decompressedData = zstd.ZstdSimple.decompress(new Uint8Array(data));
                 cacheWorker.postMessage(decompressedData.buffer);
                 packetsGet += 1;

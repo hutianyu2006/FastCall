@@ -5,10 +5,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>急电</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@oneidentity/zstd-js@1.0.3/wasm/index.umd.js" integrity="sha256-pfGRQM+3oZUazTQfHiiL1F88DQAvtuhOLH0vr8fkMrg=" crossorigin="anonymous"></script>
-    <script src="index.js"></script>
 </head>
 <body>
+    <noscript>
+        本应用需要启用Javascript
+    </noscript>
     <div class='flex space-x-2 justify-center items-center bg-gray-100 h-screen dark:bg-black' id="loadingPage">
         <span class='sr-only'>Loading...</span>
         <div class='h-8 w-8 bg-blue-500 rounded-full animate-bounce [animation-delay:-0.3s]'></div>
@@ -32,7 +33,7 @@
                 生成随机密钥
             </button>
         </div>
-        
+
         <div id="connectionTips"
              class="text-gray-600 text-lg md:text-base font-medium mx-4">
             使用方法：在两台设备上打开此页面，输入相同的配对密钥（推荐在一端生成随机密钥，然后在另一端输入相同的密钥），然后在其中一端点击开始配对
@@ -78,6 +79,8 @@
             连接方式：<div id="connectionMethod" class="inline"></div>
         </div>
     </div>
-
+    <!--Built from /yoshihitoh/zstd-codec-->
+    <script type="module" src="zstd.js"></script>
+    <script src="index.js"></script>
 </body>
 </html>
