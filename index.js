@@ -172,7 +172,6 @@ document.addEventListener('DOMContentLoaded', async function () {
                     else {
                         const chunk = data.slice(offset, offset + chunkSize);
                         const compressedChunk = zstd.ZstdSimple.compress(new Uint8Array(chunk));
-                        console.log("Ready to send",compressedChunk.buffer);
                         dataChannel.send(compressedChunk.buffer);
                         //dataChannel.send(chunk);
                         offset += chunkSize;
@@ -284,9 +283,9 @@ document.addEventListener('DOMContentLoaded', async function () {
      * Event handler for when the data channel is closed.
      * Reloads the page to establish a new connection.
      */
-    /*dataChannel.onclose = () => {
+    dataChannel.onclose = () => {
         location.reload();
-    };*/
+    };
 
     /**
      * Event handler for when the connection secret input value changes.
@@ -362,12 +361,11 @@ document.addEventListener('DOMContentLoaded', async function () {
                 document.getElementById("statusWindow").classList.add("hidden");
 
             } else {
-                console.log("Data received", data);
                 const decompressedData = zstd.ZstdSimple.decompress(new Uint8Array(data));
                 cacheWorker.postMessage(decompressedData.buffer);
                 packetsGet += 1;
-                bytesGet = packetsGet * chunkSize;
-                lastSpeed += chunkSize;
+                bytesGet = packetsGet * chunkSize /2;
+                lastSpeed += chunkSize /2;
                 await changeProgress((bytesGet / fileSize * 100).toFixed(1) + "%");
             }
         }
