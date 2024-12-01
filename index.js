@@ -180,7 +180,8 @@ document.addEventListener('DOMContentLoaded', async function () {
                     }
                 }
                 const chunk = data.slice(offset, offset + chunkSize);
-                dataChannel.send(chunk);
+                const compressedChunk = zstd.ZstdSimple.compress(chunk);
+                dataChannel.send(compressedChunk.buffer);
                 offset += chunkSize;
                 lastSpeed += chunkSize;
                 changeProgress((offset / file.size * 100).toFixed(1) + "%");
