@@ -185,7 +185,7 @@ document.addEventListener('DOMContentLoaded', async function () {
             }, 1000);
             await new Promise((resolve) => {
                 dataChannel.bufferedAmountLowThreshold = 1;
-                dataChannel.onbufferedamountlow = () => {
+                dataChannel.onbufferedamountlow = async () => {
                     if (offset >= data.byteLength) {
                         resolve()
                     }
