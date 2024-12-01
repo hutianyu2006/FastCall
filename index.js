@@ -173,7 +173,6 @@ document.addEventListener('DOMContentLoaded', async function () {
                         const chunk = data.slice(offset, offset + chunkSize);
                         const compressedChunk = zstd.ZstdSimple.compress(new Uint8Array(chunk));
                         dataChannel.send(compressedChunk.buffer);
-                        //dataChannel.send(chunk);
                         offset += chunkSize;
                         lastSpeed += chunkSize;
                         changeProgress((offset / file.size * 100).toFixed(1) + "%");
@@ -371,6 +370,10 @@ document.addEventListener('DOMContentLoaded', async function () {
         }
     };
 
+    /**
+     * Cache of ICE candidates from remote peer
+     */
+    const remoteCandidates = [];
 
     /**
      * Event handler for when a message is received from the server.
@@ -401,7 +404,13 @@ document.addEventListener('DOMContentLoaded', async function () {
             //To ensure ICE Candidate is set after SDP
             if (peerConnection.remoteDescription) {
                 // Handle ICE candidate
-                await peerConnection.addIceCandidate(new RTCIceCandidate(data.ice));
+                for (let i = 0; i < remoteCandidates.length; i++) {
+                    await peerConnection.addIceCandidate(remoteCandidates.shift);
+                }
+                await peerConnection.addIceCandidate(data.ice);
+            }
+            else {
+                remoteCandidates.push(data.ice); 
             }
         }
     }
