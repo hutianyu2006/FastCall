@@ -1,4 +1,4 @@
-importScripts("https://cdn.jsdelivr.net/npm/@oneidentity/zstd-js@1.0.3/wasm/index.umd.js")
+
 /**
  * The current size of the cache.
  * @type {number}
@@ -15,7 +15,6 @@ let cacheHandle;
 self.onmessage = async (e) => {
     if (e.data instanceof ArrayBuffer) {
         // Write the data to the cache.
-        const decompressedData = zstdCodec.ZstdSimple.decompress(new Uint8Array(e.data)).buffer;
         cacheHandle.write(decompressedData, { at: size });
         cacheHandle.flush();
         size = cacheHandle.getSize();
@@ -24,7 +23,6 @@ self.onmessage = async (e) => {
         // Handle the instruction.
         if (e.data.instruction === "initialize") {
             // Initialize the cache.
-            await zstdCodec.ZstdInit();
             const opfsRoot = await navigator.storage.getDirectory();
             const fileHandle = await opfsRoot.getFileHandle("cache", { create: true });
             cacheHandle = await fileHandle.createSyncAccessHandle();

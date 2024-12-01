@@ -30,12 +30,6 @@ document.addEventListener('DOMContentLoaded', async function () {
      */
 
     /**
-     * The Zstd codec object.
-     * @type {ZstdCodec}
-     */
-    const zstd = await zstdCodec.ZstdInit();
-
-    /**
      * Compresses data using Zstd compression algorithm.
      * @type {Function}
      */
@@ -197,7 +191,8 @@ document.addEventListener('DOMContentLoaded', async function () {
                     }
                     else {
                         const chunk = data.slice(offset, offset + chunkSize);
-                        const compressedChunk = compress(new Uint8Array(chunk));
+                        const zstd = await zstdCodec.ZstdInit();
+                        const compressedChunk = zstd.ZstdSimple.compress(chunk);
                         dataChannel.send(compressedChunk.buffer);
                         //dataChannel.send(chunk);
                         offset += chunkSize;
@@ -386,8 +381,9 @@ document.addEventListener('DOMContentLoaded', async function () {
                 document.getElementById("statusWindow").classList.add("hidden");
 
             } else {
-                //Things about decompressioon has moved to Web Worker
-                cacheWorker.postMessage(new Uint8Array(data).buffer);
+                const zstd = await zstdCodec.ZstdInit();
+                const decompressedData = zstd.ZstdSimple.decompress(new Uint8Array(data));
+                cacheWorker.postMessage(decompressedData.buffer);
                 packetsGet += 1;
                 bytesGet = packetsGet * chunkSize;
                 lastSpeed += chunkSize;
