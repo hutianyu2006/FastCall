@@ -15,7 +15,7 @@ let cacheHandle;
 self.onmessage = async (e) => {
     if (e.data instanceof ArrayBuffer) {
         // Write the data to the cache.
-        cacheHandle.write(decompressedData, { at: size });
+        cacheHandle.write(e.data, { at: size });
         cacheHandle.flush();
         size = cacheHandle.getSize();
     }
