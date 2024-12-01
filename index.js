@@ -30,18 +30,6 @@ document.addEventListener('DOMContentLoaded', async function () {
      */
 
     /**
-     * Compresses data using Zstd compression algorithm.
-     * @type {Function}
-     */
-    const compress = zstd.ZstdSimple.compress;
-
-    /**
-     * Decompresses data using Zstd compression algorithm.
-     * @type {Function}
-     */
-    const decompress = zstd.ZstdSimple.decompress;
-
-    /**
      * Removes the loading page and shows the connection page.
      */
     document.getElementById("loadingPage").remove();
