@@ -224,7 +224,7 @@ document.addEventListener('DOMContentLoaded', async function () {
      * @param {string} label - The label for the data channel.
      * @returns {RTCDataChannel} The newly created RTCDataChannel object.
      */
-    let dataChannel = peerConnection.createDataChannel("chat");
+    let dataChannel = peerConnection.createDataChannel("data");
 
     /**
      * Event handler for when the data channel is successfully opened.
